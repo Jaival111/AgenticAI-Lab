@@ -29,6 +29,7 @@ def run_with_replanning(grid, start, goal, blocked_cell):
         if not plan:
             print("No path available!")
             return
+        print("Old path: ", plan)
         
         step_taken = False
         for move, next_pos in plan:
@@ -36,7 +37,9 @@ def run_with_replanning(grid, start, goal, blocked_cell):
             if next_pos == blocked_cell:
                 print(f"Obstacle detected at {next_pos}! Updating internal model and replanning...")
                 grid[next_pos[0]][next_pos[1]] = '#'  # Update world model
-                break
+                plan = bfs(grid, start, goal)
+                print("New path: ", plan)
+                return
             else:
                 current = next_pos
                 print(f"Executed {move} to {current}")
@@ -44,4 +47,4 @@ def run_with_replanning(grid, start, goal, blocked_cell):
                 
     print("Successfully reached goal!")
 
-run_with_replanning(grid, (0, 0), (2, 3), blocked_cell=(0, 2))
+run_with_replanning(grid, (0, 0), (2, 3), blocked_cell=(2, 1))
