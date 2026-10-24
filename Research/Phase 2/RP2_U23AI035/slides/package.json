@@ -1,0 +1,7 @@
+{
+  "name": "rp2-slides",
+  "private": true,
+  "description": "Builds the RP2 slide deck from results/main",
+  "scripts": { "build": "node build_slides.js" },
+  "dependencies": { "pptxgenjs": "3.12.0" }
+}

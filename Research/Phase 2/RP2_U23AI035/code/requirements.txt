@@ -1,0 +1,9 @@
+# Python 3.10 or 3.11
+requests==2.32.3
+PyYAML==6.0.2
+tokenizers==0.20.3        # exact prompt-token counting (tokenizer file only, no weights)
+huggingface_hub==0.26.2   # used by tokenizers.from_pretrained
+pypdf==5.1.0              # reading PDF reports inside workspaces
+Pillow==11.0.0            # describing image artefacts
+matplotlib==3.9.2
+pytest==8.3.3

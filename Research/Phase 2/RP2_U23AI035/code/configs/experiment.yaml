@@ -1,0 +1,46 @@
+# Pinned experiment configuration. Every run copies this file, plus the model
+# digests reported by Ollama, into results/<run_id>/manifest.json.
+# Change values here, never inside the code, and never between runs of one table.
+
+devai:
+  repo: https://github.com/metauto-ai/agent-as-a-judge.git
+  commit: 43c2fa7b84ef0c1522e8250576e6798bace29dd0   # main as of 2026-03-28
+  local_dir: data/devai_repo
+
+task_subset:
+  n_tasks: 20                 # tasks for which we generate workspaces and hand-label
+  selection_seed: 465
+  exclude_kaggle: true        # we have no Kaggle credentials in the sandbox
+  exclude_web_navigation: true
+  always_include: []          # task 39 is handled separately (original OpenHands workspace)
+
+ollama:
+  host: http://localhost:11434   # override with env var OLLAMA_HOST
+  request_timeout_s: 600
+  max_retries: 3
+
+judge:
+  model: qwen2.5:7b-instruct       # the model under test (Phase 1 objective)
+  tokenizer_hf_id: Qwen/Qwen2.5-7B-Instruct   # used only to count prompt tokens exactly
+  temperature: 0.7
+  top_p: 0.9
+  num_ctx: 16384
+  num_predict: 512
+  seeds: [11, 22, 33]              # one seed per repeated run (>= 3 runs required)
+  k_max: 5                         # samples drawn per requirement; majority over k <= k_max is computed offline
+  k_eval: [1, 3, 5]                # odd k values reported in the tables
+  max_file_tokens: 2000            # per located file (same cap as the original implementation)
+  max_locate_files: 5
+  max_dump_tokens: 12000           # cap for the LLM-as-a-Judge workspace dump
+  max_tree_lines: 200
+
+developer:
+  model: llama3.1:8b-instruct-q4_K_M   # deliberately a different family from the judge
+  temperature: 0.2
+  top_p: 0.9
+  num_ctx: 16384
+  num_predict: 2048
+  seed: 7
+  max_steps: 25
+  time_limit_s: 1800               # 30 minutes, as in the paper
+  exec_timeout_s: 300

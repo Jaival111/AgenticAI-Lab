@@ -1,0 +1,12 @@
+# Sandbox for scripts/02_generate_workspaces.py when the developer agent may execute code.
+# The agent's shell commands then run inside this container, not on your machine.
+#   docker build -f docker/Dockerfile.devagent -t aaj-devagent .
+#   docker run --rm -it -v "${PWD}:/repo" -e OLLAMA_HOST=http://host.docker.internal:11434 aaj-devagent
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y --no-install-recommends git build-essential && rm -rf /var/lib/apt/lists/*
+WORKDIR /repo
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir numpy pandas scikit-learn seaborn torch --extra-index-url https://download.pytorch.org/whl/cpu
+ENV AAJ_SANDBOX=1
+CMD ["python", "scripts/02_generate_workspaces.py"]
